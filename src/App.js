@@ -4,8 +4,9 @@ import { useState, useEffect } from 'react';
 import PunkList from './components/PunkList';
 import Main from './components/Main';
 import Header from './components/Header';
-import { ethers } from 'ethers';
-import { NFTLabsSDK } from '@nftlabs/sdk';
+// import { ethers } from 'ethers';
+// import { NFTLabsSDK } from '@nftlabs/sdk';
+import { ThirdwebSDK } from '@3rdweb/sdk';
 
 function App() {
 	const [punkListData, setPunkListData] = useState([]);
@@ -14,27 +15,13 @@ function App() {
 	useEffect(() => {
 		const getMyNfts = async () => {
 			// Web3 browser user detected. You can now use the provider.
-			const accounts = await window.ethereum.request({
-				method: 'eth_requestAccounts'
-			});
-			console.log(accounts);
-
-			const provider = new ethers.providers.Web3Provider(window.ethereum);
-			console.log(provider);
-
-			const signer = provider.getSigner();
-
-			const sdk = new NFTLabsSDK(signer);
-			console.log(sdk);
-
-			const nft = await sdk.getNFTModule(
+			const sdk = new ThirdwebSDK('rinkeby');
+			const nft = sdk.getNFTModule(
 				'0x83A164Ad6947ddDc64Fe959e50625760b51946bB'
 			);
 			console.log(nft);
-
 			const owned = await nft.getAllWithOwner();
 			console.log(owned);
-
 			setPunkListData(owned);
 		};
 		getMyNfts();
@@ -58,3 +45,33 @@ function App() {
 }
 
 export default App;
+
+// useEffect(() => {
+//   const getMyNfts = async () => {
+//     // Web3 browser user detected. You can now use the provider.
+//     const accounts = await window.ethereum.request({
+//       method: 'eth_requestAccounts'
+//     });
+//     console.log(accounts);
+
+//     const provider = new ethers.providers.Web3Provider(window.ethereum);
+//     console.log(provider);
+
+//     const signer = provider.getSigner();
+
+//     const sdk = new NFTLabsSDK(signer);
+//     console.log(sdk);
+
+//     const nft = await sdk.getNFTModule(
+//       '0x83A164Ad6947ddDc64Fe959e50625760b51946bB'
+//     );
+//     console.log(nft);
+
+//     const owned = await nft.getAllWithOwner();
+//     console.log(owned);
+
+//     setPunkListData(owned);
+//   };
+//   getMyNfts();
+//   // fetchData();
+// }, []);
